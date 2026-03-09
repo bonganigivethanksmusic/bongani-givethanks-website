@@ -75,6 +75,44 @@
 
     .nav-links a:hover { opacity: 1; color: var(--ochre); }
 
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      z-index: 200;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--ochre);
+      transition: all 0.3s ease;
+    }
+
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    @media (max-width: 700px) {
+      .hamburger { display: flex; }
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(18, 9, 4, 0.98);
+        justify-content: center;
+        align-items: center;
+        gap: 2.5rem;
+        z-index: 150;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links a { font-size: 1rem; letter-spacing: 0.3em; }
+    }
+
     /* HERO */
     .hero {
       min-height: 100vh;
@@ -601,7 +639,12 @@
   <!-- NAV -->
   <nav>
     <div class="nav-logo">Bongani Givethanks</div>
-    <ul class="nav-links">
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <ul class="nav-links" id="nav-links">
       <li><a href="#about">About</a></li>
       <li><a href="#music">Music</a></li>
       <li><a href="#live">Live</a></li>
@@ -880,7 +923,19 @@
     <span class="footer-copy">Mabopane · Pretoria · South Africa · African Creative Music</span>
   </footer>
 
-  <script>
+ <script>
+    function toggleMenu() {
+      document.getElementById('hamburger').classList.toggle('open');
+      document.getElementById('nav-links').classList.toggle('open');
+    }
+
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => {
+        document.getElementById('hamburger').classList.remove('open');
+        document.getElementById('nav-links').classList.remove('open');
+      });
+    });
+
     const revealEls = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
